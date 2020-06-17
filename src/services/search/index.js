@@ -2,31 +2,33 @@ import axios from 'axios';
 
 export const searchService = {
   getMakes () {
-    return fetch('http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make')
-    .then(res => res.json())
-    .then(data => { return data}
-    );
+    return axios('http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make')
+    .then(res => { return res.data });
   },
 
   getModels(id) {
-    return fetch(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Model?MakeID=${id}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      return data});
+    return axios(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Model?MakeID=${id}`)
+    .then(res => { return res.data });
   },
 
   getVersions(id) {
-    return fetch(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Version?ModelID=${id}`)
-    .then(res => res.json())
-    .then(data => {
-      console.log(data);
-      return data});
+    return axios(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Version?ModelID=${id}`)
+    .then(res => { return res.data });
   },
 
   getOffers(page) {
-    return fetch(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles?Page=${page}`)
-    .then(res => res.json())
-    .then(data => {return data});
+    return axios(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles?Page=${page}`)
+    .then(res => {return res.data});
+  },
+
+  formatReal(x) {
+    const xString = x.toString();
+    const decimal = xString.substr(xString.length - 2, xString.length);
+    let parts = xString.replace(/(\d)(\d{2})$/, "$1").split(".");
+    return parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  },
+
+  formatNumber(value) {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   }
 }

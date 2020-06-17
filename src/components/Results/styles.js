@@ -15,12 +15,12 @@ export const BoxResults = styled.div`
     display: grid;
     flex-wrap: wrap;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    grid-gap: 20px;
+    grid-gap: 10px;
     margin: 10px 0; 
 `;
 
 export const Item = styled.div`
-  max-width: 200px;
+  max-width: 250px;
   margin-bottom: 15px;
   cursor: pointer;
   justify-self: center;
@@ -55,7 +55,7 @@ export const Item = styled.div`
 `;
 
 export const BoxImg = styled.div`
-  width: 200px;
+  width: 100%;
   height: 180px;
   background-color: #fafafa;
   margin: 0 auto 15px;
@@ -63,7 +63,8 @@ export const BoxImg = styled.div`
 
   img {
       width: 100%;
-      transition: all .2s;
+      height: 100%;
+      object-fit: cover;
   }
 `;
 

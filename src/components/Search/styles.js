@@ -68,25 +68,26 @@ export const SearchBox = styled.div`
 
 export const CheckboxContainer = styled.div`
   margin-bottom: 15px;
+`;
 
-  /* input[type=checkbox] {
-    display: none;
+export const HiddenCheckbox = styled.input.attrs({type: 'checkbox'})`
+  display: none;
 
-    &:checked + label {
-      &:before {
-        content: 'X'
-      }
+  &:checked + label {
+    svg {
+      display: inline-block;
     }
-  } */
+  }
+`;
 
-  label {
+export const StyledCheckbox = styled.label`
     position: relative;
     padding-left: 25px;
     margin-right: 30px;
+    transition: all 150ms;
 
     &::before {
-      content: '';
-      color: #ca242e;
+      content: '';      
       position: absolute;
       left: 0;
       top: 50%;
@@ -96,22 +97,16 @@ export const CheckboxContainer = styled.div`
       border: 1px solid #e9e9e9; 
       border-radius: 4px;
     }
-  }
-`;
 
-export const HiddenCheckbox = styled.input.attrs({type: 'checkbox'})`
-
-`;
-
-export const StyledCheckbox = styled.label`
-  display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: ${props => props.checked ? 'salmon' : 'papayawhip'};
-  border-radius: 3px;
-  transition: all 150ms;
+    svg {
+      display: none;
+      position: absolute;
+      color: #ca242e;
+      left: 2px;
+      top: 4px;
+    }
+  
 `
- 
 
 export const BoxField = styled.div`
     width: 23%;
@@ -167,6 +162,7 @@ export const BoxField = styled.div`
         left: 0;
         background-color: transparent;
         padding-left: 70px;
+        font-weight: 600;
       }
     }
 
@@ -232,6 +228,11 @@ export const ButtonSubmit = styled(BtnFields)`
   text-transform: uppercase;
   padding: 10px 20px;
   margin-left: 20px;
+  transition: .4 all;
+
+  &:hover {
+    opacity: .8;
+  }
 
   @media (max-width: 767px) {
     flex-basis: 100%;

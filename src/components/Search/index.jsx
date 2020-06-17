@@ -1,4 +1,16 @@
 import React from 'react';
+import {connect} from 'react-redux';
+import { 
+  updateMakesList,
+  updateModelsList,
+  updateVersionsList,
+  handleCheckboxChange,
+  updateSelectedRadius,
+  updateSelectedMake,
+  updateSelectedModel,
+  updateSelectedVersion,
+  updateOffersList
+} from './../../store/actions';
 import { searchService } from './../../services/search';
 import { FaCarSide, FaMotorcycle, FaMapMarkerAlt, FaCheck, FaAngleRight} from 'react-icons/fa';
 import Logo from './../../assets/images/webmotors_logo.svg';
@@ -19,23 +31,6 @@ import {
 } from './styles';
 
 class Search extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      checked: false,
-      makes: [],
-      models: [],
-      versions: [],
-      offers: [],
-      radius: 100,
-      selectedMake: 'Todas',
-      selectedModel: 'Todas',
-      selectedVersion: 'Todas'
-    };
-  }
-
-  handleCheckboxChange = e =>
-    this.setState({ checked: event.target.checked })
 
   handleMakesChange = e => {
     const id = e.target.value;
@@ -43,8 +38,8 @@ class Search extends React.Component {
     const selectedMake = options[selectedIndex].innerHTML;
 
     searchService.getModels(id)
-    .then(data => {
-      this.setState({models : data, selectedMake, selectedModel: 'Todas', selectedVersion: 'Todas'})
+    .then(models => {
+      this.props.handleMakesChange(models, selectedMake, 'Todas', 'Todas')
     });
   }
 
@@ -54,23 +49,23 @@ class Search extends React.Component {
     const selectedModel = options[selectedIndex].innerHTML;
 
     searchService.getVersions(id)
-    .then(data => {this.setState({versions : data, selectedModel, selectedVersion: 'Todas'})});
+    .then(versions => {this.props.handleModelsChange(versions, selectedModel, 'Todas')});
   }
 
   handleSelectedVersion = e => {
     const {options, selectedIndex} = e.target;
     const version = options[selectedIndex].innerHTML;
-    this.setState({selectedVersion : version})
+    this.props.updateSelectedVersion(version)
   }
 
   handlerFormSubmit = () => {
     searchService.getOffers(1)
-    .then(data => {this.setState({offers : data})})
+    .then(offers => {this.props.updateOffersList(offers)})
   }
 
   componentDidMount(){
     searchService.getMakes()
-    .then(res => {return this.setState({makes : res})}
+    .then(res => {return this.props.updateMakesList(res)}
     );
   }
 
@@ -97,16 +92,22 @@ class Search extends React.Component {
           </div>
           <button>Vender meu carro</button>
         </HeaderSearch>
-        <SearchBox>
+         <SearchBox>
           <form>
             <CheckboxContainer  className="box-check">              
               <HiddenCheckbox name="new" id="new"
-                checked={this.state.checked} 
-                onChange={this.handleCheckboxChange}  />
-              <StyledCheckbox htmlFor="new">Novos</StyledCheckbox>
+                checked={this.props.checked} 
+                onChange={(e)=> this.props.handleCheckboxChange(e.target.checked)}  />
+              <StyledCheckbox htmlFor="new">
+                <FaCheck />
+                Novos
+              </StyledCheckbox>
               
               <HiddenCheckbox name="used" id="used" />
-              <StyledCheckbox htmlFor="used">Usados</StyledCheckbox>
+              <StyledCheckbox htmlFor="used">
+                <FaCheck />
+                Usados
+              </StyledCheckbox>
             </CheckboxContainer >
 
             <BoxField className="col-5 box-location">
@@ -114,12 +115,12 @@ class Search extends React.Component {
                 <FaMapMarkerAlt style={{color: '#ca242e', marginRight: 10}}/>
                 Onde: 
               </span>
-              <input list="browsers" name="browser" id="browser" />
+              <input list="browsers" value="São Paulo - SP" name="browser" id="browser" readOnly />
             </BoxField>
 
             <BoxField className="col-1 box-radius">
-              <span>Raio: <strong>{this.state.radius}km</strong></span>
-              <select onChange={(e)=> this.setState({radius : e.target.value})}>
+              <span>Raio: <strong>{this.props.radius}km</strong></span>
+              <select onChange={(e)=> this.props.updateSelectedRadius(e.target.value)}>
                 <option value="50">50km</option>
                 <option value="100">100km</option>
                 <option value="150">150km</option>
@@ -128,20 +129,20 @@ class Search extends React.Component {
             </BoxField>
 
             <BoxField className="col-3">
-              <span>Marcas: <strong>{this.state.selectedMake}</strong></span>
+              <span>Marcas: <strong>{this.props.selectedMake}</strong></span>
               <select onChange={this.handleMakesChange}>
               <option value="0">Todos</option>
-                {this.state.makes.map(item => {
+                {this.props.makes.map(item => {
                   return <option key={item.ID} value={item.ID}>{item.Name}</option>
                 })}
               </select>
             </BoxField>
 
             <BoxField className="col-3">
-              <span>Modelos: <strong>{this.state.selectedModel}</strong></span>
+              <span>Modelos: <strong>{this.props.selectedModel}</strong></span>
               <select onChange={this.handleModelsChange}>
                 <option value="0">Todos</option>
-                {this.state.models.map(item => {
+                {this.props.models.map(item => {
                     return <option key={item.ID} value={item.ID}>{item.Name}</option>
                   })
                 }
@@ -157,7 +158,7 @@ class Search extends React.Component {
 
             <BoxField className="col-3">
               <span>Faixa de preço: </span>
-              <select onChange={this.handleModelsChange}>
+              <select>
                 <option value="0">Todos</option>
                 <option value="1">R$ 0 a R$ 5.000</option>
                 <option value="2">R$ 5.0001 a R$ 10.000</option>
@@ -167,12 +168,12 @@ class Search extends React.Component {
                 <option value="6">R$ 25.0001 a R$ 30.000</option> 
               </select>
             </BoxField>  
-
+            
             <BoxField className="col-6">
-              <span>Versões: <strong>{this.state.selectedVersion}</strong></span>
+              <span>Versões: <strong>{this.props.selectedVersion}</strong></span>
               <select onChange={this.handleSelectedVersion}>
                 <option value="0">Versão: Todas</option>
-                {this.state.versions.map(item => {
+                {this.props.versions.map(item => {
                     return <option key={item.ID} value={item.ID}>{item.Name}</option>
                   })
                 }
@@ -184,10 +185,58 @@ class Search extends React.Component {
             <CleanFields>Limpar filtros</CleanFields>
             <ButtonSubmit type="button" onClick={this.handlerFormSubmit}>Ver ofertas</ButtonSubmit>
           </SearchAction>
-        </SearchBox>
+        </SearchBox> 
       </Container>
     );
   }
 }
 
-export default Search;
+const mapStateToProps = (state)=> {
+  return {
+    checked: state.cars.checked,
+    makes: state.cars.makes,
+    models: state.cars.models,
+    versions: state.cars.versions,
+    offers: state.cars.offers,
+    radius: state.cars.radius,
+    selectedMake: state.cars.selectedMake,
+    selectedModel: state.cars.selectedModel,
+    selectedVersion: state.cars.selectedVersion
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateMakesList: obj => {
+      dispatch(updateMakesList(obj));
+    },      
+    updateSelectedRadius: num => {
+      dispatch(updateSelectedRadius(num));
+    },
+    handleCheckboxChange: bool => {
+      dispatch(handleCheckboxChange(bool));
+    },
+    handleMakesChange: (models, selectedMake, selectedModel, selectedVersion) => {
+      dispatch(updateModelsList(models))
+      dispatch(updateSelectedMake(selectedMake))
+      dispatch(updateSelectedModel(selectedModel))
+      dispatch(updateSelectedVersion(selectedVersion))
+    },
+    handleModelsChange: (versions, selectedModel, selectedVersion) => {
+      dispatch(updateVersionsList(versions))
+      dispatch(updateSelectedModel(selectedModel))
+      dispatch(updateSelectedVersion(selectedVersion))
+    },
+    updateSelectedVersion: text => {
+      dispatch(updateSelectedVersion(text))
+    },
+    updateOffersList: offers => {
+      dispatch(updateOffersList(offers))
+    }    
+  }
+}
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Search);
