@@ -1,35 +1,17 @@
 import React from 'react';
 import GlobalStyle, {Container} from './styles';
+import Search from './components/Search';
+import Results from './components/Results';
 
 class App extends React.Component {
+
   render() {
     return(
       <>
         <GlobalStyle />
         <Container>
-          <form>
-            <label>
-              <input type="checkbox" name="novos" id="novos" />Novos
-            </label>
-            <label>
-              <input type="checkbox" name="usados" id="usados" />Usados
-            </label>
-
-            <input type="text" />
-            <select>
-              <option>50km</option>
-              <option>100km</option>
-              <option>150km</option>
-              <option>200km</option>
-            </select>
-
-            <select>
-              <option>50km</option>
-              <option>100km</option>
-              <option>150km</option>
-              <option>200km</option>
-            </select>
-          </form>
+          <Search />
+          <Results />
         </Container>
       </>
     );

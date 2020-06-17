@@ -28,6 +28,9 @@ module.exports = {
          }
 ]
    },
+   resolve: {
+      extensions: ['.js', '.jsx']
+   },
    plugins: [
       new HtmlWebPackPlugin({
          template: path.resolve( __dirname, 'public/index.html' ),
