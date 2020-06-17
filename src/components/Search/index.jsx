@@ -32,41 +32,11 @@ import {
 
 class Search extends React.Component {
 
-  handleMakesChange = e => {
-    const id = e.target.value;
-    const {options, selectedIndex} = e.target;
-    const selectedMake = options[selectedIndex].innerHTML;
-
-    searchService.getModels(id)
-    .then(models => {
-      this.props.handleMakesChange(models, selectedMake, 'Todas', 'Todas')
-    });
-  }
-
-  handleModelsChange = e => {
-    const id = e.target.value;
-    const {options, selectedIndex} = e.target;
-    const selectedModel = options[selectedIndex].innerHTML;
-
-    searchService.getVersions(id)
-    .then(versions => {this.props.handleModelsChange(versions, selectedModel, 'Todas')});
-  }
-
-  handleSelectedVersion = e => {
-    const {options, selectedIndex} = e.target;
-    const version = options[selectedIndex].innerHTML;
-    this.props.updateSelectedVersion(version)
-  }
-
-  handlerFormSubmit = () => {
-    searchService.getOffers(1)
-    .then(offers => {this.props.updateOffersList(offers)})
-  }
-
   componentDidMount(){
     searchService.getMakes()
-    .then(res => {return this.props.updateMakesList(res)}
-    );
+    .then(res => {
+      return this.props.updateMakesList(res)
+    });
   }
 
   render() {
@@ -130,7 +100,7 @@ class Search extends React.Component {
 
             <BoxField className="col-3">
               <span>Marcas: <strong>{this.props.selectedMake}</strong></span>
-              <select onChange={this.handleMakesChange}>
+              <select onChange={this.props.handleMakesChange}>
               <option value="0">Todos</option>
                 {this.props.makes.map(item => {
                   return <option key={item.ID} value={item.ID}>{item.Name}</option>
@@ -140,7 +110,7 @@ class Search extends React.Component {
 
             <BoxField className="col-3">
               <span>Modelos: <strong>{this.props.selectedModel}</strong></span>
-              <select onChange={this.handleModelsChange}>
+              <select onChange={this.props.handleModelsChange}>
                 <option value="0">Todos</option>
                 {this.props.models.map(item => {
                     return <option key={item.ID} value={item.ID}>{item.Name}</option>
@@ -171,7 +141,7 @@ class Search extends React.Component {
             
             <BoxField className="col-6">
               <span>Versões: <strong>{this.props.selectedVersion}</strong></span>
-              <select onChange={this.handleSelectedVersion}>
+              <select onChange={this.props.handleSelectedVersion}>
                 <option value="0">Versão: Todas</option>
                 {this.props.versions.map(item => {
                     return <option key={item.ID} value={item.ID}>{item.Name}</option>
@@ -182,8 +152,8 @@ class Search extends React.Component {
           </form>
           <SearchAction>
             <AdvancedSearch><FaAngleRight />Busca Avançada</AdvancedSearch>
-            <CleanFields>Limpar filtros</CleanFields>
-            <ButtonSubmit type="button" onClick={this.handlerFormSubmit}>Ver ofertas</ButtonSubmit>
+            <CleanFields onClick={this.props.clearFilter}>Limpar filtros</CleanFields>
+            <ButtonSubmit type="button" onClick={this.props.handlerFormSubmit}>Ver ofertas</ButtonSubmit>
           </SearchAction>
         </SearchBox> 
       </Container>
@@ -209,30 +179,61 @@ const mapDispatchToProps = dispatch => {
   return {
     updateMakesList: obj => {
       dispatch(updateMakesList(obj));
-    },      
+    },   
+
     updateSelectedRadius: num => {
       dispatch(updateSelectedRadius(num));
     },
+
     handleCheckboxChange: bool => {
       dispatch(handleCheckboxChange(bool));
     },
-    handleMakesChange: (models, selectedMake, selectedModel, selectedVersion) => {
-      dispatch(updateModelsList(models))
-      dispatch(updateSelectedMake(selectedMake))
-      dispatch(updateSelectedModel(selectedModel))
-      dispatch(updateSelectedVersion(selectedVersion))
+
+    handleMakesChange: e => {
+      const id = e.target.value;
+      const {options, selectedIndex} = e.target;
+      const selectedMake = options[selectedIndex].innerHTML;
+  
+      searchService.getModels(id)
+      .then(models => {
+        dispatch(updateModelsList(models))
+        dispatch(updateSelectedMake(selectedMake))
+        dispatch(updateSelectedModel('Todas'))
+        dispatch(updateSelectedVersion('Todas'))
+      });
     },
-    handleModelsChange: (versions, selectedModel, selectedVersion) => {
-      dispatch(updateVersionsList(versions))
-      dispatch(updateSelectedModel(selectedModel))
-      dispatch(updateSelectedVersion(selectedVersion))
+
+    handleModelsChange: e => {
+      const id = e.target.value;
+      const {options, selectedIndex} = e.target;
+      const selectedModel = options[selectedIndex].innerHTML;
+  
+      searchService.getVersions(id)
+      .then(versions => {
+          dispatch(updateVersionsList(versions))
+          dispatch(updateSelectedModel(selectedModel))
+          dispatch(updateSelectedVersion('Todas'))
+      });
     },
-    updateSelectedVersion: text => {
-      dispatch(updateSelectedVersion(text))
+
+    handleSelectedVersion: e => {
+      const {options, selectedIndex} = e.target;
+      const version = options[selectedIndex].innerHTML;
+      dispatch(updateSelectedVersion(version));
     },
-    updateOffersList: offers => {
-      dispatch(updateOffersList(offers))
-    }    
+
+    handlerFormSubmit: () => {
+      searchService.getOffers(1)
+      .then(offers => {
+        dispatch(updateOffersList(offers))
+      })
+    },
+  
+    clearFilter: () =>{
+      dispatch(updateSelectedMake('Todas'))
+      dispatch(updateSelectedModel('Todas'))
+      dispatch(updateSelectedVersion('Todas'))
+    }
   }
 }
 

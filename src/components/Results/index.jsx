@@ -1,5 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
+import { updateOffersList } from './../../store/actions';
 import { searchService } from './../../services/search';
 import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Version, BoxPrice, BoxYear, ItemFooter, Location } from './styles';
 import { FaMapMarkerAlt, FaRegHeart} from 'react-icons/fa';
@@ -11,11 +12,17 @@ class Results extends React.Component {
     };
   }
 
+
   render() {
-    {console.log(this.props.offers)}
+    {console.log('lista',this.props.offers)}
     return (
       <Container>
-        <TitleSearch>Honda Fit em São Paulo/SP - Novos e Usados</TitleSearch>
+        {this.props.offers.length > 0 && 
+          <TitleSearch>
+            {this.props.selectedMake == 'Todas' ? 'Carros ' : this.props.selectedMake + ' '}
+            {this.props.selectedModel == 'Todas' ? ' ' : this.props.selectedModel} em São Paulo/SP - Novos e Usados
+          </TitleSearch>
+        }
         <BoxResults>
           { 
             this.props.offers.map(item =>{
@@ -50,10 +57,21 @@ class Results extends React.Component {
 
 const mapStateToProps = (state)=> {
   return {
-    offers: state.cars.offers
+    offers: state.cars.offers,
+    selectedMake: state.cars.selectedMake,
+    selectedModel: state.cars.selectedModel
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateOffersList: offers => {
+      dispatch(updateOffersList(offers))
+    }    
   }
 }
 
 export default connect(
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Results);
