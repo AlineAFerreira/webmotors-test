@@ -6,12 +6,6 @@ import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Vers
 import { FaMapMarkerAlt, FaRegHeart} from 'react-icons/fa';
 
 class Results extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
-
 
   render() {
     {console.log('lista',this.props.offers)}
