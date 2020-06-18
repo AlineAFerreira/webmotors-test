@@ -1,12 +1,15 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import { updateOffersList } from './../../store/actions';
+import { fetchOffersList } from './../../store/actions';
 import { searchService } from './../../services/search';
 import { Loading } from './../Loading';
-import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Version, BoxPrice, BoxYear, ItemFooter, Location } from './styles';
+import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Version, BoxPrice, BoxYear, ItemFooter, Location, LoadMore } from './styles';
 import { FaMapMarkerAlt, FaRegHeart} from 'react-icons/fa';
 
 class Results extends React.Component {
+  fetchOffers() {
+    this.props.fetchOffersList(this.props.currentPage + 1);
+  }
 
   render() {
     return (
@@ -58,6 +61,11 @@ class Results extends React.Component {
           )
         }
         </BoxResults>
+          { (this.props.currentPage < this.props.totalPages && this.props.offers.length > 0) && 
+            <LoadMore onClick={this.fetchOffers}>
+              Carregar mais items
+            </LoadMore> 
+          }
       </Container>
     );
   }
@@ -68,14 +76,16 @@ const mapStateToProps = (state)=> {
     showLoading: state.cars.showLoading,
     offers: state.cars.offers,
     selectedMake: state.cars.selectedMake,
-    selectedModel: state.cars.selectedModel
+    selectedModel: state.cars.selectedModel,
+    currentPage: state.cars.currentPage,
+    totalPages: state.cars.totalPages
   }
 }
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateOffersList: offers => {
-      dispatch(updateOffersList(offers))
+      fetchOffersList: page => {
+      dispatch(fetchOffersList(page))
     }    
   }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { 
-  updateMakesList,
+  fetchMakes,
   updateModelsList,
   updateVersionsList,
   handleCheckboxChange,
@@ -9,7 +9,7 @@ import {
   updateSelectedMake,
   updateSelectedModel,
   updateSelectedVersion,
-  updateOffersList,
+  fetchOffersList,
   updateLoading
 } from './../../store/actions';
 import { searchService } from './../../services/search';
@@ -34,10 +34,7 @@ import {
 class Search extends React.Component {
 
   componentDidMount(){
-    searchService.getMakes()
-    .then(res => {
-      return this.props.updateMakesList(res)
-    });
+    this.props.fetchMakes();
   }
 
   render() {
@@ -122,7 +119,9 @@ class Search extends React.Component {
             <BoxField className="col-3">
               <span>Ano Desejado: </span>
               <select onChange={this.handleModelsChange}>
-
+                <option value="0">Todos</option>
+                <option value="1">2019</option>
+                <option value="2">2020</option>
               </select>
             </BoxField>   
 
@@ -177,8 +176,8 @@ const mapStateToProps = (state)=> {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateMakesList: obj => {
-      dispatch(updateMakesList(obj));
+    fetchMakes: () => {
+      dispatch(fetchMakes());
     },   
 
     updateSelectedRadius: num => {
@@ -224,13 +223,7 @@ const mapDispatchToProps = dispatch => {
 
     handlerFormSubmit: () => {
       dispatch(updateLoading(true))      
-      searchService.getOffers(1)
-      .then(offers => {
-        setTimeout(()=>{
-          dispatch(updateOffersList(offers))
-          dispatch(updateLoading(false)) 
-        }, 1000)
-      })
+      dispatch(fetchOffersList(1))
     },
   
     clearFilter: () =>{

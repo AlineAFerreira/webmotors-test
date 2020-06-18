@@ -29,6 +29,8 @@ export const BoxResults = styled.div`
 `;
 
 export const Item = styled.div`
+  display: flex;
+  flex-direction: column;
   max-width: 250px;
   margin-bottom: 15px;
   cursor: pointer;
@@ -63,6 +65,7 @@ export const BoxImg = styled.div`
 export const ItemBody = styled.div`
   text-transform: uppercase;
   padding: 8px;
+  flex: 1;
 `;
 
 export const Title = styled.h2`
@@ -101,6 +104,22 @@ export const Location = styled.span`
   margin: 0 8px;
 `;
 
+export const LoadMore = styled.button`
+  width: 240px;
+  color: #fff;
+  font-size: 13px;
+  background-color: #ca242e;
+  display: block;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 20px auto;  
+
+  &:hover {
+    opacity: .8;
+  }
+`;
 
 
 

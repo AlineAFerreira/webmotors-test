@@ -8,6 +8,7 @@ import {
   UPDATE_SELECTED_MODEL,
   UPDATE_SELECTED_VERSION,
   UPDATE_OFFERS_LIST,
+  UPDATE_CURRENT_PAGE,
   UPDATE_LOADING
 } from './../types/cars';
 
@@ -21,7 +22,9 @@ const INITIAL_STATE = {
   selectedMake: 'Todas',
   selectedModel: 'Todas',
   selectedVersion: 'Todas',
-  showLoading: false
+  showLoading: false,
+  currentPage: 1,
+  totalPages: 3
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -69,7 +72,13 @@ export default function (state = INITIAL_STATE, action) {
     case UPDATE_OFFERS_LIST:
       return {
         ...state,
-        offers: action.payload
+        showLoading: false,
+        offers: state.offers.concat(action.payload)
+      } 
+    case UPDATE_CURRENT_PAGE:
+      return {
+        ...state,
+        currentPage: action.payload
       } 
     case UPDATE_LOADING:
       return {

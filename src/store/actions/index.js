@@ -8,8 +8,10 @@ import {
   UPDATE_SELECTED_MODEL,
   UPDATE_SELECTED_VERSION,
   UPDATE_OFFERS_LIST,
+  UPDATE_CURRENT_PAGE,
   UPDATE_LOADING
 } from './../types/cars';
+import { searchService } from '../../services/search';
 
 export const updateMakesList = obj => ({
   type: UPDATE_MAKES_LIST,
@@ -60,6 +62,29 @@ export const updateLoading = bool => ({
   type: UPDATE_LOADING,
   payload: bool
 })
+
+export const updateCurrentPage = page => ({
+  type: UPDATE_CURRENT_PAGE,
+  payload: page
+});
+
+export function fetchOffersList(pageNumber) {
+  return function (dispatch) {
+    dispatch(updateCurrentPage(pageNumber));
+    return searchService.getOffers(pageNumber).then(res => {
+      dispatch(updateOffersList(res.data));
+    });
+  }
+}
+
+export function fetchMakes() {
+  return function (dispatch) {
+    return searchService.getMakes()
+    .then(res => {
+      return dispatch(updateMakesList(res.data));
+    });
+  }
+}
 
 
 
