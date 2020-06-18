@@ -7,7 +7,8 @@ import {
   UPDATE_SELECTED_MAKE,
   UPDATE_SELECTED_MODEL,
   UPDATE_SELECTED_VERSION,
-  UPDATE_OFFERS_LIST
+  UPDATE_OFFERS_LIST,
+  UPDATE_LOADING
 } from './../types/cars';
 
 const INITIAL_STATE = {
@@ -19,7 +20,8 @@ const INITIAL_STATE = {
   radius: 100,
   selectedMake: 'Todas',
   selectedModel: 'Todas',
-  selectedVersion: 'Todas'
+  selectedVersion: 'Todas',
+  showLoading: false
 }
 
 export default function (state = INITIAL_STATE, action) {
@@ -68,7 +70,12 @@ export default function (state = INITIAL_STATE, action) {
       return {
         ...state,
         offers: action.payload
-      }       
+      } 
+    case UPDATE_LOADING:
+      return {
+        ...state,
+        showLoading: action.payload
+      }             
     default:
       return state
   }

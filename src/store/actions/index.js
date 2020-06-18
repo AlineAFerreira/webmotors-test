@@ -7,7 +7,8 @@ import {
   UPDATE_SELECTED_MAKE, 
   UPDATE_SELECTED_MODEL,
   UPDATE_SELECTED_VERSION,
-  UPDATE_OFFERS_LIST
+  UPDATE_OFFERS_LIST,
+  UPDATE_LOADING
 } from './../types/cars';
 
 export const updateMakesList = obj => ({
@@ -54,6 +55,13 @@ export const updateOffersList = offers => ({
   type: UPDATE_OFFERS_LIST,
   payload: offers
 })
+
+export const updateLoading = bool => ({
+  type: UPDATE_LOADING,
+  payload: bool
+})
+
+
 
 
 

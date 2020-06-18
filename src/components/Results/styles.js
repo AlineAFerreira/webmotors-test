@@ -9,6 +9,15 @@ export const TitleSearch = styled.h1`
   font-size: 22px;
   color: #2e2e37;
   padding: 15px 10px;
+
+  &.loading {
+    height: 30px;
+    background: #ccc;
+    text-indent: -99999px;
+    margin-top: 15px;
+    padding: 0;
+    border-radius: 4px;
+  }
 `;
 
 export const BoxResults = styled.div`
@@ -30,28 +39,10 @@ export const Item = styled.div`
   overflow: hidden;
   box-shadow: rgba(158, 184, 209, 0.41) 0px 2px 9px 0px;
 
-  &:hover .box-img img {
+  &:hover div img {
       transform: scale(1.1);
   }
 
-  &.loading {
-      .box-img {
-          background-color: #d2d2d2;
-      }
-      span {
-          background-color: #d2d2d2;
-          height: 20px;
-          margin-bottom: 10px;
-      }
-  }
-
-  span {
-      display: block;
-
-      &:last-child {
-          color: #999;
-      }
-  }
 `;
 
 export const BoxImg = styled.div`
@@ -64,6 +55,7 @@ export const BoxImg = styled.div`
   img {
       width: 100%;
       height: 100%;
+      transition: .4s all;
       object-fit: cover;
   }
 `;
