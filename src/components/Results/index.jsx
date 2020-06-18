@@ -2,7 +2,8 @@ import React from 'react';
 import {connect} from 'react-redux';
 import { fetchOffersList } from './../../store/actions';
 import { searchService } from './../../services/search';
-import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Version, BoxPrice, BoxYear, ItemFooter, Location } from './styles';
+import { Loading } from './../Loading';
+import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Version, BoxPrice, BoxYear, ItemFooter, Location, LoadMore } from './styles';
 import { FaMapMarkerAlt, FaRegHeart} from 'react-icons/fa';
 
 class Results extends React.Component {
@@ -10,26 +11,6 @@ class Results extends React.Component {
     super(props);
     this.fetchOffers = this.fetchOffers.bind(this);
   }
-  
-  componentDidMount() {
-    document.addEventListener('scroll', this.trackScrolling);
-  }
-  
-  componentWillUnmount() {
-    document.removeEventListener('scroll', this.trackScrolling);
-  }
-
-  isBottom(el) {
-    return el.getBoundingClientRect().bottom <= window.innerHeight;
-  }
-  
-  trackScrolling = () => {
-    const wrappedElement = document.getElementsByClassName('offer-results');
-    if (this.isBottom(wrappedElement)) {
-      alert('header bottom reached');
-      document.removeEventListener('scroll', this.trackScrolling);
-    }
-  };
 
   fetchOffers() {
     this.props.fetchOffersList(this.props.currentPage + 1);
@@ -38,14 +19,27 @@ class Results extends React.Component {
   render() {
     return (
       <Container>
-        {this.props.offers.length > 0 && 
-          <TitleSearch>
-            {this.props.selectedMake == 'Todas' ? 'Carros ' : this.props.selectedMake + ' '}
-            {this.props.selectedModel == 'Todas' ? ' ' : this.props.selectedModel} em São Paulo/SP - Novos e Usados
-          </TitleSearch>
-        }
-        <BoxResults className="offer-results">
-          { 
+        {this.props.showLoading ? (
+          <TitleSearch className={this.props.showLoading ? 'loading' : ''} />
+        ):(
+          this.props.offers.length > 0 &&
+            <TitleSearch>
+              {this.props.selectedMake == 'Todas' ? 'Carros ' : this.props.selectedMake + ' '}
+              {this.props.selectedModel == 'Todas' ? ' ' : this.props.selectedModel} em São Paulo/SP - Novos e Usados
+            </TitleSearch>          
+        )}
+
+        <BoxResults>
+          {this.props.showLoading ? (
+            <>
+              <Loading />
+              <Loading />
+              <Loading />
+              <Loading />
+              <Loading />
+              <Loading />
+            </>
+          ) : (
             this.props.offers.map(item =>{
               return (
                 <Item key={item.ID}>
@@ -68,21 +62,15 @@ class Results extends React.Component {
                   </ItemFooter>
                 </Item>
               )
-            }) 
-          }
+            })             
+          )
+        }
         </BoxResults>
-        { (this.props.currentPage < this.props.totalPages && this.props.offers.length > 0) && <div 
-          onClick={this.fetchOffers}
-          style={{
-            width: '100%',
-            backgroundColor: 'black',
-            padding: 10,
-            textAlign: 'center',
-            color: 'white',
-            cursor: 'pointer'
-          }}>
-          Carregar mais items
-      </div> }
+          { (this.props.currentPage < this.props.totalPages && this.props.offers.length > 0) && 
+            <LoadMore onClick={this.fetchOffers}>
+              Carregar mais items
+            </LoadMore> 
+          }
       </Container>
     );
   }
@@ -90,6 +78,7 @@ class Results extends React.Component {
 
 const mapStateToProps = (state)=> {
   return {
+    showLoading: state.cars.showLoading,
     offers: state.cars.offers,
     selectedMake: state.cars.selectedMake,
     selectedModel: state.cars.selectedModel,

@@ -9,7 +9,8 @@ import {
   updateSelectedMake,
   updateSelectedModel,
   updateSelectedVersion,
-  fetchOffersList
+  fetchOffersList,
+  updateLoading
 } from './../../store/actions';
 import { searchService } from './../../services/search';
 import { FaCarSide, FaMotorcycle, FaMapMarkerAlt, FaCheck, FaAngleRight} from 'react-icons/fa';
@@ -88,7 +89,6 @@ class Search extends React.Component {
             <BoxField className="col-1 box-radius">
               <span>Raio: <strong>{this.props.radius}km</strong></span>
               <select onChange={(e)=> this.props.updateSelectedRadius(e.target.value)}>
-                <option value="50">50km</option>
                 <option value="100">100km</option>
                 <option value="150">150km</option>
                 <option value="200">200km</option>
@@ -119,7 +119,9 @@ class Search extends React.Component {
             <BoxField className="col-3">
               <span>Ano Desejado: </span>
               <select onChange={this.handleModelsChange}>
-
+                <option value="0">Todos</option>
+                <option value="1">2019</option>
+                <option value="2">2020</option>
               </select>
             </BoxField>   
 
@@ -220,6 +222,7 @@ const mapDispatchToProps = dispatch => {
     },
 
     handlerFormSubmit: () => {
+      dispatch(updateLoading(true))      
       dispatch(fetchOffersList(1))
     },
   

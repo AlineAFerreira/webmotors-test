@@ -8,7 +8,8 @@ import {
   UPDATE_SELECTED_MODEL,
   UPDATE_SELECTED_VERSION,
   UPDATE_OFFERS_LIST,
-  UPDATE_CURRENT_PAGE
+  UPDATE_CURRENT_PAGE,
+  UPDATE_LOADING
 } from './../types/cars';
 import { searchService } from '../../services/search';
 
@@ -56,6 +57,11 @@ export const updateOffersList = offers => ({
   type: UPDATE_OFFERS_LIST,
   payload: offers
 });
+
+export const updateLoading = bool => ({
+  type: UPDATE_LOADING,
+  payload: bool
+})
 
 export const updateCurrentPage = page => ({
   type: UPDATE_CURRENT_PAGE,

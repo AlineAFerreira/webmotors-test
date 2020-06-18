@@ -9,6 +9,15 @@ export const TitleSearch = styled.h1`
   font-size: 22px;
   color: #2e2e37;
   padding: 15px 10px;
+
+  &.loading {
+    height: 30px;
+    background: #ccc;
+    text-indent: -99999px;
+    margin-top: 15px;
+    padding: 0;
+    border-radius: 4px;
+  }
 `;
 
 export const BoxResults = styled.div`
@@ -20,6 +29,8 @@ export const BoxResults = styled.div`
 `;
 
 export const Item = styled.div`
+  display: flex;
+  flex-direction: column;
   max-width: 250px;
   margin-bottom: 15px;
   cursor: pointer;
@@ -30,28 +41,10 @@ export const Item = styled.div`
   overflow: hidden;
   box-shadow: rgba(158, 184, 209, 0.41) 0px 2px 9px 0px;
 
-  &:hover .box-img img {
+  &:hover div img {
       transform: scale(1.1);
   }
 
-  &.loading {
-      .box-img {
-          background-color: #d2d2d2;
-      }
-      span {
-          background-color: #d2d2d2;
-          height: 20px;
-          margin-bottom: 10px;
-      }
-  }
-
-  span {
-      display: block;
-
-      &:last-child {
-          color: #999;
-      }
-  }
 `;
 
 export const BoxImg = styled.div`
@@ -64,6 +57,7 @@ export const BoxImg = styled.div`
   img {
       width: 100%;
       height: 100%;
+      transition: .4s all;
       object-fit: cover;
   }
 `;
@@ -71,6 +65,7 @@ export const BoxImg = styled.div`
 export const ItemBody = styled.div`
   text-transform: uppercase;
   padding: 8px;
+  flex: 1;
 `;
 
 export const Title = styled.h2`
@@ -109,6 +104,22 @@ export const Location = styled.span`
   margin: 0 8px;
 `;
 
+export const LoadMore = styled.button`
+  width: 240px;
+  color: #fff;
+  font-size: 13px;
+  background-color: #ca242e;
+  display: block;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  margin: 20px auto;  
+
+  &:hover {
+    opacity: .8;
+  }
+`;
 
 
 
