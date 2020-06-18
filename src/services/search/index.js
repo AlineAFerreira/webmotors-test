@@ -2,8 +2,7 @@ import axios from 'axios';
 
 export const searchService = {
   getMakes () {
-    return axios('http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make')
-    .then(res => { return res.data });
+    return axios('http://desafioonline.webmotors.com.br/api/OnlineChallenge/Make');
   },
 
   getModels(id) {
@@ -17,8 +16,7 @@ export const searchService = {
   },
 
   getOffers(page) {
-    return axios(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles?Page=${page}`)
-    .then(res => {return res.data});
+    return axios(`http://desafioonline.webmotors.com.br/api/OnlineChallenge/Vehicles?Page=${page}`);
   },
 
   formatReal(x) {

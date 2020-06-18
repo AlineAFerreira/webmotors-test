@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import { 
-  updateMakesList,
+  fetchMakes,
   updateModelsList,
   updateVersionsList,
   handleCheckboxChange,
@@ -9,7 +9,7 @@ import {
   updateSelectedMake,
   updateSelectedModel,
   updateSelectedVersion,
-  updateOffersList
+  fetchOffersList
 } from './../../store/actions';
 import { searchService } from './../../services/search';
 import { FaCarSide, FaMotorcycle, FaMapMarkerAlt, FaCheck, FaAngleRight} from 'react-icons/fa';
@@ -33,10 +33,7 @@ import {
 class Search extends React.Component {
 
   componentDidMount(){
-    searchService.getMakes()
-    .then(res => {
-      return this.props.updateMakesList(res)
-    });
+    this.props.fetchMakes();
   }
 
   render() {
@@ -177,8 +174,8 @@ const mapStateToProps = (state)=> {
 
 const mapDispatchToProps = dispatch => {
   return {
-    updateMakesList: obj => {
-      dispatch(updateMakesList(obj));
+    fetchMakes: () => {
+      dispatch(fetchMakes());
     },   
 
     updateSelectedRadius: num => {
@@ -223,10 +220,7 @@ const mapDispatchToProps = dispatch => {
     },
 
     handlerFormSubmit: () => {
-      searchService.getOffers(1)
-      .then(offers => {
-        dispatch(updateOffersList(offers))
-      })
+      dispatch(fetchOffersList(1))
     },
   
     clearFilter: () =>{
