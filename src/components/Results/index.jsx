@@ -38,6 +38,8 @@ class Results extends React.Component {
               <Loading />
               <Loading />
               <Loading />
+              <Loading />
+              <Loading />
             </>
           ) : (
             this.props.offers.map(item =>{
