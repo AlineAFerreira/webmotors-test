@@ -56,7 +56,7 @@ export const updateSelectedVersion = text => ({
 export const updateOffersList = offers => ({
   type: UPDATE_OFFERS_LIST,
   payload: offers
-})
+});
 
 export const updateLoading = bool => ({
   type: UPDATE_LOADING,
@@ -85,20 +85,3 @@ export function fetchMakes() {
     });
   }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

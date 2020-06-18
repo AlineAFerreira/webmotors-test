@@ -7,6 +7,11 @@ import { Container, BoxResults, TitleSearch, Item, BoxImg, ItemBody, Title, Vers
 import { FaMapMarkerAlt, FaRegHeart} from 'react-icons/fa';
 
 class Results extends React.Component {
+  constructor(props) {
+    super(props);
+    this.fetchOffers = this.fetchOffers.bind(this);
+  }
+
   fetchOffers() {
     this.props.fetchOffersList(this.props.currentPage + 1);
   }
@@ -84,7 +89,7 @@ const mapStateToProps = (state)=> {
 
 const mapDispatchToProps = dispatch => {
   return {
-      fetchOffersList: page => {
+    fetchOffersList: page => {
       dispatch(fetchOffersList(page))
     }    
   }
